@@ -39,28 +39,42 @@
 
 <div class="py-8 px-4 mx-auto max-w-screen-xl lg:px-12">
     <div class="card gap-16 items-center mx-auto max-w-screen-xl lg:grid lg:grid-cols-2 rounded-lg">
-        <div class="p-8">
-            <label class="block text-gray-700 text-sm font-bold mb-2">Domain Name</label>
-            <input type="text" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" bind:value={domainName} placeholder="Enter a domain name" />
-
-            <button class="bg-blue-500 mt-2 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" on:click={fetchWhoisData} disabled={loading}>Lookup</button>
-            {#if error}
-                <p class="text-red-500 mt-2">{error}</p>
-            {/if}
+      <div class="p-8">
+        <!-- Input section -->
+        <label class="block text-gray-700 text-sm font-bold mb-2">Domain Name</label>
+        <input type="text" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" bind:value={domainName} placeholder="Enter a domain name" />
+  
+        <button class="bg-blue-500 mt-2 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" on:click={fetchWhoisData} disabled={loading}>Lookup</button>
+        {#if error}
+          <p class="text-red-500 mt-2">{error}</p>
+        {/if}
+        
+       
+      </div>
+      
+      <div class="p-8 h-full flex rounded-lg relative justify-center items-center bg-gray-100">
+        <div class="w-full">
+          <!-- Additional content in the right column -->
+          {#if whoisData}
+          <!-- WHOIS Data table -->
+          <label class="block text-gray-700 text-sm font-bold mt-4">WHOIS Data</label>
+          <div class="max-h-96 overflow-auto">
+            <table class="border rounded w-full p-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+              <tbody>
+                {#each Object.entries(whoisData) as [key, value]}
+                  <tr>
+                    <td class="font-bold pr-4">{key}</td>
+                    <td>{value}</td>
+                  </tr>
+                {/each}
+              </tbody>
+            </table>
+          </div>
+        {:else}
+          <!-- No WHOIS data message -->
+          <p class="text-gray-700 text-sm mt-4">No WHOIS data found for the given domain.</p>
+        {/if}
         </div>
-        <div class="p-8 h-full flex rounded-lg relative justify-center items-center bg-gray-100">
-            <div class="w-full">
-                {#if loading}
-                    <p class="text-gray-700 text-sm">Loading...</p>
-                {:else}
-                    {#if whoisData}
-                        <label class="block text-gray-700 text-sm font-bold mb-2">WHOIS Data</label>
-                        <pre class="border rounded w-full p-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline overflow-auto max-h-96">{JSON.stringify(whoisData, null, 2)}</pre>
-                    {:else}
-                        <p class="text-gray-700 text-sm">No WHOIS data found for the given domain.</p>
-                    {/if}
-                {/if}
-            </div>
-        </div>
+      </div>
     </div>
-</div>
+  </div>
